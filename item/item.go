@@ -1,6 +1,8 @@
 package item
 
 import (
+	"amazon-wrapper/common"
+
 	"log"
 	"net/http"
 	"strings"
@@ -31,25 +33,17 @@ func GetItem(item string, variant string) (res gin.H) {
 	price := document.Find("#priceblock_ourprice").Text()
 	rating := document.Find(".a-icon-alt").First().Text()
 	numReviews := document.Find("#acrCustomerReviewText").First().Text()
-	landingImage, exists := document.Find("#landingImage").Attr("src")
-	if !exists {
-		log.Println("Cannot find Landing Image")
-		landingImage = "N/A"
-	}
-	hiResLandingImage, exists := document.Find("#landingImage").Attr("data-old-hires")
-	if !exists {
-		log.Println("Cannot find Hi Res Landing Image")
-		hiResLandingImage = "N/A"
-	}
+	landingImage, _ := document.Find("#landingImage").Attr("src")
+	hiResLandingImage, _ := document.Find("#landingImage").Attr("data-old-hires")
 
 	res = gin.H{
 		"url":               "https://www.amazon.ca/" + item + "/dp/" + variant,
-		"productTitle":      productTitle,
-		"price":             price,
-		"numReviews":        numReviews,
-		"rating":            rating,
-		"landingImage":      landingImage,
-		"hiResLandingImage": hiResLandingImage,
+		"productTitle":      common.Ternary(productTitle),
+		"price":             common.Ternary(price),
+		"numReviews":        common.Ternary(numReviews),
+		"rating":            common.Ternary(rating),
+		"landingImage":      common.Ternary(landingImage),
+		"hiResLandingImage": common.Ternary(hiResLandingImage),
 	}
 
 	return res
