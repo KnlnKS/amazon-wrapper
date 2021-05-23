@@ -2,6 +2,7 @@ package main
 
 import (
 	"amazon-wrapper/item"
+	"amazon-wrapper/search"
 
 	"github.com/gin-gonic/gin"
 )
@@ -11,12 +12,7 @@ func main() {
 
 	r.GET("/item/:item/:variant", item.Start)
 
-	r.GET("/search", func(c *gin.Context) {
-		searchTerm := c.Query("s")
-		c.JSON(200, gin.H{
-			"searchTerm": searchTerm,
-		})
-	})
+	r.GET("/search", search.Start)
 
 	r.Run()
 }
