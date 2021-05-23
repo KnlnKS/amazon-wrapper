@@ -10,7 +10,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func GetItemPage(item string, variant string) (document *goquery.Document) {
+func getItemPage(item string, variant string) (document *goquery.Document) {
 	response, err := http.Get("https://www.amazon.ca/" + item + "/dp/" + variant)
 	common.OnError("Error getting page. ", err)
 
@@ -22,8 +22,8 @@ func GetItemPage(item string, variant string) (document *goquery.Document) {
 	return document
 }
 
-func GetItem(item string, variant string) (res gin.H) {
-	document := GetItemPage(item, variant)
+func getItem(item string, variant string) (res gin.H) {
+	document := getItemPage(item, variant)
 
 	productTitle := strings.TrimSpace(document.Find("#productTitle").Text())
 	price := document.Find("#priceblock_ourprice").Text()
@@ -49,5 +49,5 @@ func Start(c *gin.Context) {
 	item := c.Param("item")
 	variant := c.Param("variant")
 
-	c.JSON(200, GetItem(item, variant))
+	c.JSON(200, getItem(item, variant))
 }
