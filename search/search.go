@@ -4,30 +4,16 @@ import (
 	"amazon-wrapper/common"
 	"fmt"
 
-	"net/http"
-
 	"github.com/PuerkitoBio/goquery"
 	"github.com/gin-gonic/gin"
 )
-
-func getSearchResultsPage(searchTerm string) (document *goquery.Document) {
-	response, err := http.Get("https://www.amazon.ca/s?k=" + searchTerm)
-	common.OnError("Error getting page. ", err)
-
-	defer response.Body.Close()
-
-	document, err = goquery.NewDocumentFromReader(response.Body)
-	common.OnError("Error loading body. ", err)
-
-	return document
-}
 
 func extractSearchResult(i int, result *goquery.Selection) {
 	fmt.Println(result.Text())
 }
 
 func getSearchResults(searchTerm string) (res gin.H) {
-	document := getSearchResultsPage(searchTerm)
+	document := common.GetPage("https://www.amazon.ca/s?k=" + searchTerm)
 
 	document.Find(`div[data-component-type="s-search-result"]`).Each(extractSearchResult)
 
