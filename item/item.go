@@ -3,7 +3,6 @@ package item
 import (
 	"amazon-wrapper/common"
 
-	"log"
 	"net/http"
 	"strings"
 
@@ -13,15 +12,12 @@ import (
 
 func GetItemPage(item string, variant string) (document *goquery.Document) {
 	response, err := http.Get("https://www.amazon.ca/" + item + "/dp/" + variant)
-	if err != nil {
-		log.Fatal(err)
-	}
+	common.OnError("Error getting page. ", err)
+
 	defer response.Body.Close()
 
 	document, err = goquery.NewDocumentFromReader(response.Body)
-	if err != nil {
-		log.Fatal("Error loading HTTP response body. ", err)
-	}
+	common.OnError("Error loading body. ", err)
 
 	return document
 }

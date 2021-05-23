@@ -1,5 +1,7 @@
 package common
 
+import "log"
+
 func Ternary(str string) (ret string) {
 	if len(str) != 0 {
 		ret = str
@@ -8,4 +10,10 @@ func Ternary(str string) (ret string) {
 	}
 
 	return ret
+}
+
+func OnError(msg string, err error) {
+	if err != nil {
+		log.Fatal(msg, err)
+	}
 }
