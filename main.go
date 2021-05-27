@@ -11,8 +11,6 @@ func main() {
 	r := gin.Default()
 
 	r.GET("/item/:item/:variant", item.Start)
-
 	r.GET("/search", search.Start)
-
 	r.Run()
 }

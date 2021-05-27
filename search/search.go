@@ -2,6 +2,7 @@ package search
 
 import (
 	"amazon-wrapper/common"
+
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -23,24 +24,21 @@ func getSearchResults(searchTerm string) (res gin.H) {
 		smallImage, _ := result.Find(".s-image").Attr("src")
 		imageSet, _ := result.Find(".s-image").Attr("srcset")
 		url, _ := result.Find(".s-line-clamp-4>.a-link-normal").Attr("href")
-
 		endpoint := ""
-
 		if !sponsored {
 			endpoint = "item/" + strings.Split(url, "/")[1] + "/" + strings.Split(url, "/")[3]
 		}
 
 		parsedSearchResults = append(parsedSearchResults, gin.H{
-			"productTitle": productTitle,
-			"rating":       rating,
-			"price":        price,
-			"smallImage":   smallImage,
+			"productTitle": common.Ternary(productTitle),
+			"rating":       common.Ternary(rating),
+			"price":        common.Ternary(price),
+			"smallImage":   common.Ternary(smallImage),
 			"imageSet":     strings.Split(imageSet, ", "),
 			"sponsored":    sponsored,
-			"url":          url,
-			"endpoint":     endpoint,
+			"url":          common.Ternary(url),
+			"endpoint":     common.Ternary(endpoint),
 		})
-
 	}
 
 	res = gin.H{
